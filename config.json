@@ -1,27 +1,21 @@
 {
-   "ptt_boards":[
-      "Gossiping",
-      "HomeTeach",
-      "give",
-      "soho",
-      "CodeJob",
-      "Salary",
-      "Wanted",
-      "Taoyuan",
-	  "car-pool"
-   ],
-   "keywords":[
-      "程式",
-      "網頁",
-      "女性",
-      "女裝",
-      "女鞋",
-      "襪",
-      "裙",
-      "免費",
-      "鴻海",
-      "情報",
-	  "內湖"
+   "setting":[
+      {
+         "board":"wanted",
+         "keywords":[
+            "徵求",
+            "早安",
+            "晚安"
+         ]
+      },
+      {
+         "board":"Gossiping",
+         "keywords":[
+            "爆",
+            "柯文哲",
+            "問掛"
+         ]
+      }
    ],
    "mail":"puperchang@gmail.com"
 }

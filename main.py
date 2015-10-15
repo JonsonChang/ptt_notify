@@ -1,12 +1,13 @@
-﻿import urllib2
-import json
-import pprint
-import time
-from lxml import etree
-import sys
-import string
+﻿import json
 import os
+import pprint
+import sys
+import time
+import string
 import traceback
+import thread
+import urllib2
+from lxml import etree
 
 import smtplib
 from email.mime.text import MIMEText
@@ -161,9 +162,25 @@ class ptt_notify:
             time.sleep(10)
 
 
-a = ptt_notify("Wanted",["徵","晚"])
-a.process()
+def ThreadfunA(string, sleeptime, *args):
+    a = ptt_notify("Wanted", ["徵","安"])
+    a.process()
+    print '{0}_{1}\n'.format(string, sleeptime)
+    time.sleep(sleeptime)
 
+
+def ThreadfunB(string, sleeptime, *args):
+    a = ptt_notify("Wanted", ["求","火"])
+    a.process()
+    print '{0}_{1}\n'.format(string, sleeptime)
+    time.sleep(sleeptime)
+
+if __name__ == "__main__":
+    thread.start_new_thread(ThreadfunA, ("ThreadFunA", 3))
+    thread.start_new_thread(ThreadfunB, ("ThreadFunB", 4))
+    while(True):
+        print 'MainThread {0}'.format(thread.get_ident())
+        time.sleep(1)
 
 
 #    def process(self):
