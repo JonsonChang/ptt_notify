@@ -26,13 +26,13 @@ class MyPrinter(pprint.PrettyPrinter):
 
 
 class ptt_notify:
-    hestory_interest_list = {}  # 找到的文章列表
-    hestory_checked_list = {}  # 找到的文章列表
 
     def __init__(self, board, keywords, email):
         self.board = board
         self.keywords = keywords
         self.email = email
+        self.hestory_interest_list = {}  # 命中keyword的文章
+        self.hestory_checked_list = {}  # 確認過的文章
         self.httpHandler = urllib2.HTTPHandler(debuglevel=0)
         self.httpsHandler = urllib2.HTTPSHandler(debuglevel=0)
         self.opener = urllib2.build_opener(self.httpHandler, self.httpsHandler)
@@ -41,13 +41,13 @@ class ptt_notify:
         pass
 
     def mail(self, keywords, subject, body, url):
-        print self.email
+        #return
         try:
             msg = MIMEMultipart("alternative")
             msg['Subject'] = subject
             msg['From'] = "party@qmo-a.com"
             msg['To'] = self.email
-            msg['Bcc'] = "puperchang@gmail.com"
+            msg['Bcc'] = ""
 
             part1 = MIMEText(u"網址：" + url + u"\n\n關鍵字：" + keywords + u"\n\n\n" + body, "plain", "utf-8")
             msg.attach(part1)
@@ -153,12 +153,13 @@ class ptt_notify:
                 if len(self.hestory_checked_list) > 500:
                     self.hestory_checked_list.clear()  # 移除全部
 
-                print "interest num = " + str(len(self.hestory_interest_list))
-                print "checked num = " + str(len(self.hestory_checked_list))
+                print "{thread_id} interest num = {num}".format(num = str(len(self.hestory_interest_list)), thread_id = thread.get_ident() )
+                print "{thread_id} checked num = {num} ".format(num = str(len(self.hestory_checked_list)), thread_id = thread.get_ident() )
+                MyPrinter().pprint(self.hestory_interest_list)
                 print u"\n等待中..."
             except Exception:
                 print('generic exception: ' + traceback.format_exc())
-            time.sleep(10)
+            time.sleep(30)
 
 
 def Thread_monitor(board, keywords, email):
@@ -168,7 +169,7 @@ def Thread_monitor(board, keywords, email):
     
 if __name__ == "__main__":
     json_data = open('config.json')
-    config_data = json.load(json_data)  # global 變數
+    config_data = json.load(json_data)
     json_data.close()
     
     for setting in config_data["setting"]:
