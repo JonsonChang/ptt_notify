@@ -41,7 +41,7 @@ class ptt_notify:
         pass
 
     def mail(self, keywords, subject, body, url):
-        #return
+        # return
         try:
             msg = MIMEMultipart("alternative")
             msg['Subject'] = subject
@@ -148,14 +148,14 @@ class ptt_notify:
             try:
                 print u"\n==進入" + self.board + u"版=="
                 self.get_board_list(self.board)
-        #        MyPrinter().pprint(self.hestory_interest_list)
+                # MyPrinter().pprint(self.hestory_interest_list)
 
                 if len(self.hestory_checked_list) > 500:
                     self.hestory_checked_list.clear()  # 移除全部
 
-                print "{thread_id} interest num = {num}".format(num = str(len(self.hestory_interest_list)), thread_id = thread.get_ident() )
-                print "{thread_id} checked num = {num} ".format(num = str(len(self.hestory_checked_list)), thread_id = thread.get_ident() )
-                MyPrinter().pprint(self.hestory_interest_list)
+                print "{thread_id} interest num = {num}".format(num=str(len(self.hestory_interest_list)), thread_id=thread.get_ident())
+                print "{thread_id} checked num = {num} ".format(num=str(len(self.hestory_checked_list)), thread_id=thread.get_ident())
+                # MyPrinter().pprint(self.hestory_interest_list)
                 print u"\n等待中..."
             except Exception:
                 print('generic exception: ' + traceback.format_exc())
@@ -165,18 +165,19 @@ class ptt_notify:
 def Thread_monitor(board, keywords, email):
     a = ptt_notify(board, keywords, email)
     a.process()
-    #time.sleep(1)    
-    
+
+
 if __name__ == "__main__":
     json_data = open('config.json')
     config_data = json.load(json_data)
     json_data.close()
-    
+
     for setting in config_data["setting"]:
-        MyPrinter().pprint(setting["board"])
-        MyPrinter().pprint(setting["keywords"])
+        #         MyPrinter().pprint(setting["board"])
+        #         MyPrinter().pprint(setting["keywords"])
         thread.start_new_thread(Thread_monitor, (setting["board"], setting["keywords"], config_data["mail"]))
-        
+        time.sleep(5)
+
     while(True):
         time.sleep(1)
 
