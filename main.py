@@ -26,14 +26,13 @@ class MyPrinter(pprint.PrettyPrinter):
 
 
 class ptt_notify:
-
-    #config_data = {}
     hestory_interest_list = {}  # 找到的文章列表
     hestory_checked_list = {}  # 找到的文章列表
 
-    def __init__(self, board, keywords):
+    def __init__(self, board, keywords, email):
         self.board = board
         self.keywords = keywords
+        self.email = email
         self.httpHandler = urllib2.HTTPHandler(debuglevel=0)
         self.httpsHandler = urllib2.HTTPSHandler(debuglevel=0)
         self.opener = urllib2.build_opener(self.httpHandler, self.httpsHandler)
@@ -42,13 +41,13 @@ class ptt_notify:
         pass
 
     def mail(self, keywords, subject, body, url):
-        return None
+        print self.email
         try:
             msg = MIMEMultipart("alternative")
             msg['Subject'] = subject
             msg['From'] = "party@qmo-a.com"
-            msg['To'] = ""
-            #msg['Bcc'] = self.config_data["mail"]
+            msg['To'] = self.email
+            msg['Bcc'] = "puperchang@gmail.com"
 
             part1 = MIMEText(u"網址：" + url + u"\n\n關鍵字：" + keywords + u"\n\n\n" + body, "plain", "utf-8")
             msg.attach(part1)
@@ -162,59 +161,23 @@ class ptt_notify:
             time.sleep(10)
 
 
-def ThreadfunA(string, sleeptime, *args):
-    a = ptt_notify("Wanted", ["徵","安"])
+def Thread_monitor(board, keywords, email):
+    a = ptt_notify(board, keywords, email)
     a.process()
-    print '{0}_{1}\n'.format(string, sleeptime)
-    time.sleep(sleeptime)
-
-
-def ThreadfunB(string, sleeptime, *args):
-    a = ptt_notify("Wanted", ["求","火"])
-    a.process()
-    print '{0}_{1}\n'.format(string, sleeptime)
-    time.sleep(sleeptime)
-
+    #time.sleep(1)    
+    
 if __name__ == "__main__":
-    thread.start_new_thread(ThreadfunA, ("ThreadFunA", 3))
-    thread.start_new_thread(ThreadfunB, ("ThreadFunB", 4))
+    json_data = open('config.json')
+    config_data = json.load(json_data)  # global 變數
+    json_data.close()
+    
+    for setting in config_data["setting"]:
+        MyPrinter().pprint(setting["board"])
+        MyPrinter().pprint(setting["keywords"])
+        thread.start_new_thread(Thread_monitor, (setting["board"], setting["keywords"], config_data["mail"]))
+        
     while(True):
-        print 'MainThread {0}'.format(thread.get_ident())
         time.sleep(1)
-
-
-#    def process(self):
-#        while True:
-#            try:
-#                # load config
-#                json_data = open('config.json')
-#                self.config_data = json.load(json_data)  # global 變數
-#                MyPrinter().pprint(self.config_data["keywords"])
-#                json_data.close()
-#
-#                for board in self.config_data["ptt_boards"]:
-#                    print u"\n==進入" + board + u"版=="
-#                    self.get_board_list(board)
-#        #        MyPrinter().pprint(self.hestory_interest_list)
-#
-#                if len(self.hestory_checked_list) > 500:
-#                    self.hestory_checked_list.clear()  # 移除全部
-#
-#                print "interest num = " + str(len(self.hestory_interest_list))
-#                print "checked num = " + str(len(self.hestory_checked_list))
-#                print u"\n等待中..."
-#            except Exception:
-#                print('generic exception: ' + traceback.format_exc())
-#            time.sleep(10)
-
-
-# setup cookie and debug
-
-
-#url = 'https://www.ptt.cc/bbs/Gossiping/M.1422944508.A.D98.html'
-# print get_article(url)
-# get_board_list("Food")
-
 
 # reference
 # http://blog.csdn.net/pleasecallmewhy/article/details/8925978
