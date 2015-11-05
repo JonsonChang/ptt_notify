@@ -3,19 +3,43 @@
       {
          "board":"wanted",
          "keywords":[
-            "徵求",
-            "早安",
-            "晚安"
+            "徵男"
          ]
       },
       {
-         "board":"Gossiping",
+         "board":"car-pool",
          "keywords":[
-            "爆",
-            "柯文哲",
-            "掛"
+            "內湖",
+            "龍安街"
+         ]
+      },
+      {
+         "board":"Salary",
+         "keywords":[
+            "鴻海"
+         ]
+      },
+      {
+         "board":"HomeTeach",
+         "keywords":[
+            "程式",
+            "網站",
+            "電腦",
+            "網頁"
+         ]
+      },
+      {
+         "board":"give",
+         "keywords":[
+            "桃園",
+            "全國",
+            "女性",
+            "女裝",
+            "女鞋",
+            "襪",
+            "裙"
          ]
       }
    ],
-   "mail":"h1084875@trbvm.com,oxd03567@pooae.com"
+   "mail":"puperchang@gmail.com"
 }
