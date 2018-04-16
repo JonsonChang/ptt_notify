@@ -7,6 +7,7 @@ import string
 import traceback
 import thread
 import urllib2
+import ssl
 from lxml import etree
 
 import smtplib
@@ -52,7 +53,9 @@ class ptt_notify:
             part1 = MIMEText(u"網址：" + url + u"\n\n關鍵字：" + keywords + u"\n\n\n" + body, "plain", "utf-8")
             msg.attach(part1)
 
-            s = smtplib.SMTP('localhost')
+            s = smtplib.SMTP('mail.server.com')
+#            s.set_debuglevel(1)
+            s.login("jonson@xxxxx.com", "ooooooo")
             s.sendmail(msg['From'], msg["To"].split(",") + msg["Bcc"].split(","), msg.as_string().encode('ascii'))
             s.quit()
         except Exception:
@@ -75,10 +78,15 @@ class ptt_notify:
         return s.replace("\n", "").replace("\r", "").replace("\t", "").replace(" ", "").replace(":", "").replace(".", "").replace("\"", "").replace("(", "").replace(")", "").replace(",", "").replace("，", "").replace("。", "").replace("「", "").replace("」", "").replace("、", "").replace("：", "").replace("…", "")
 
     def get_html(self, url):
+        # to fix SSL: CERTIFICATE_VERIFY_FAILED
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
         request = urllib2.Request(url)
         request.add_header('User-Agent', 'fake-client')
         try:
-            response = urllib2.urlopen(request, timeout=4)
+            response = urllib2.urlopen(request, timeout=4, context=ctx)
             return response.read().decode('utf-8')
         except urllib2.HTTPError, e:
             print('HTTPError = ' + str(e.code))
